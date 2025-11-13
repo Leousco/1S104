@@ -123,7 +123,7 @@ h1 { text-align: center; margin-bottom: 30px; color: #333; }
   <div class="sidebar-power">
     <button id="power-toggle"><i class="fas fa-sign-out-alt"></i></button>
     <div id="power-menu" class="power-menu hidden">
-      <a href="login.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      <a href="../login.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
       <a href="passenger_dashboard.php"><i class="fas fa-arrow-left"></i> Back</a>
     </div>
   </div>
@@ -169,7 +169,7 @@ h1 { text-align: center; margin-bottom: 30px; color: #333; }
             <?php endif; ?>
           </div>
           <?php if($v['VoucherCategory'] !== 'Promo'): ?>
-            <a href="../payment/process_payment.php?voucher_id=<?= $v['VoucherID'] ?>" class="buy-btn">
+            <a href="process_payment.php?voucher_id=<?= $v['VoucherID'] ?>" class="buy-btn">
               Buy Now
             </a>
           <?php else: ?>

@@ -12,7 +12,7 @@ if (!isset($_SESSION['login_attempts'])) {
 $banRemaining = 0; 
 if ($_SESSION['ban_time'] && time() < $_SESSION['ban_time']) { 
     $banRemaining = $_SESSION['ban_time'] - time(); // seconds remaining 
-    $message = "Too many failed attempts. Please try again after 1 minutes."; 
+    $message = "Too many failed attempts. Please try again after 1 minute."; 
 } 
 
 elseif ($_SERVER["REQUEST_METHOD"] == "POST") { 
@@ -31,8 +31,9 @@ elseif ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (password_verify($password, $user['PasswordHash'])) { 
             // ✅ Store session details
             $_SESSION['UserID'] = $user['UserID']; 
-            $_SESSION['Role'] = strtoupper($user['Role']); // normalize role (ADMIN, DRIVER, PASSENGER)
-            $_SESSION['Name'] = $user['FirstName']; 
+            $_SESSION['Role'] = strtoupper($user['Role']);
+            $_SESSION['Name'] = $user['FirstName'];
+            $_SESSION['Email'] = $user['Email']; // store email in session for payments
 
             // ✅ Redirect by role
             switch ($_SESSION['Role']) { 

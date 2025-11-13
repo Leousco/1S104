@@ -1,4 +1,11 @@
 <?php
+require_once __DIR__ . '/vendor/autoload.php';
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+$XENDIT_SECRET_KEY = $_ENV['XENDIT_SECRET_KEY'];
+
 $servername = "localhost";
 $username = "root";
 $password = "";
