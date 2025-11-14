@@ -7,7 +7,7 @@ $data = json_decode($payload, true);
 if (!empty($data['status']) && $data['status'] === 'PAID') {
     $external_id = $data['external_id'];
 
-    // Update transaction
+    // Update transactions table
     $stmt = $conn->prepare("UPDATE transactions SET Status='PAID' WHERE PaymentURL LIKE ?");
     $like = "%$external_id%";
     $stmt->bind_param("s", $like);
