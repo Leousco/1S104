@@ -38,8 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
           if ($stmt->execute()) {
             $message = "✅ Account verified and registered successfully! Redirecting to login...";
-            session_unset(); // clear registration session data
-            // Set a JS variable to trigger redirect
+            session_unset();
             echo "<script>
                 document.addEventListener('DOMContentLoaded', function() {
                     const popup = document.getElementById('popup-message');
@@ -73,7 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $_SESSION['reg_lastname']       = $lastname;
       $_SESSION['reg_email']          = $email;
       $_SESSION['reg_password']       = $hashed_password;
-      $_SESSION['reg_password_plain'] = $password; // Keep plain password for form
+      $_SESSION['reg_password_plain'] = $password; 
       $_SESSION['reg_role']           = $role;
       $_SESSION['reg_phone']          = $_POST['phone'];
 
@@ -92,7 +91,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           $mail->SMTPSecure = 'tls';
           $mail->Port = 587;
 
-          $mail->setFrom('novacore.mailer@gmail.com', 'Verify Email');
+          $mail->setFrom('novacore.mailer@gmail.com', 'NovaCore Team');
           $mail->addAddress($email);
           $mail->isHTML(true);
           $mail->Subject = 'Verify Your Email';

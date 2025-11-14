@@ -381,8 +381,8 @@ $balance = isset($_SESSION['balance']) ? $_SESSION['balance'] : 0;
         <i class="fas fa-percent"></i> Apply for a Discount
       </a>
 
-      <a href="buyVoucher/buy_voucher.php">
-        <i class="fas fa-tags"></i> Buy Voucher
+      <a href="buyCoin/buy_coins.php">
+        <i class="fas fa-coins"></i> Buy Coins
       </a>
 
       <div class="sidebar-power">
