@@ -62,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $firstname = $_POST['firstname'];
       $lastname  = $_POST['lastname'];
       $email     = $_POST['email'];
-      $password  = $_POST['password'];
+      $password  = $_POST['new_password'];
       $role      = "PASSENGER";
 
       $hashed_password = password_hash($password, PASSWORD_DEFAULT);
@@ -329,7 +329,7 @@ $conn->close();
       <div class="input-wrapper">
 
         <input type="password" id="password-signup" name="new_password" autocomplete="new-password" placeholder="Enter a password" required minlength="6"
-              value="<?php echo (isset($_SESSION['reg_password_plain']) && isset($_POST['password'])) ? htmlspecialchars($_SESSION['reg_password_plain']) : ''; ?>"
+              value="<?php echo (isset($_SESSION['reg_password_plain']) && isset($_POST['new_password'])) ? htmlspecialchars($_SESSION['reg_password_plain']) : ''; ?>"
               oninput="handleCombinedFeedback()" />
         <img src="https://cdn-icons-png.flaticon.com/512/159/159604.png" alt="Show Password" class="toggle-password"
             id="toggleSignupPassword" onclick="togglePasswordVisibility('password-signup','toggleSignupPassword')"/>
@@ -338,7 +338,7 @@ $conn->close();
       <label for="confirm-password">Confirm Password</label>
       <div class="input-wrapper">
         <input type="password" id="confirm-password" name="confirm_password" autocomplete="new-password" placeholder="Confirm your password" required minlength="6"
-              value="<?php echo (isset($_SESSION['reg_password_plain']) && isset($_POST['password'])) ? htmlspecialchars($_SESSION['reg_password_plain']) : ''; ?>"
+              value="<?php echo (isset($_SESSION['reg_password_plain']) && isset($_POST['new_password'])) ? htmlspecialchars($_SESSION['reg_password_plain']) : ''; ?>"
               oninput="handleCombinedFeedback()" />
         <img src="https://cdn-icons-png.flaticon.com/512/159/159604.png" alt="Show Password" class="toggle-password"
             id="toggleConfirmPassword" onclick="togglePasswordVisibility('confirm-password','toggleConfirmPassword')" />
