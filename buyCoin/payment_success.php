@@ -128,7 +128,7 @@ try {
                     </table>
                 </div>
                 
-                <p style='color: #666; font-size: 14px; margin-top: 20px;'>You can now use your coins to purchase tickets and access our services!</p>
+                <p style='color: #666; font-size: 14px; margin-top: 20px;'>You can now use your coins to purchase tickets.</p>
                 
                 <div style='text-align: center; margin-top: 30px;'>
                     <a href='http://localhost/SADPROJ/passenger_dashboard.php' style='background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); color: white; padding: 12px 30px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: bold;'>Go to Dashboard</a>

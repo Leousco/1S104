@@ -192,11 +192,14 @@ header h1 { margin-left:10px; font-size:20px; font-weight:600; display:flex; ali
   <h2 class="text-2xl font-bold mb-6 text-gray-800">Vehicles Overview</h2>
   <section class="cards">
       <div class="card"><h3>Total Vehicles</h3><p id="totalVehicles">0</p></div>
-      <div class="card"><h3>Available Vehicles</h3><p id="availableVehicles">0</p></div>
-      <div class="card"><h3>On-Going Vehicles</h3><p id="onGoingVehicles">0</p></div>
+      <div class="card"><h3>Active Vehicles</h3><p id="availableVehicles">0</p></div>
+      <div class="card"><h3>Inactive Vehicles</h3><p id="onGoingVehicles">0</p></div>
   </section>
 
-  <button class="btn btn-add" onclick="showForm()">+ Add Vehicle</button>
+  <button class="btn btn-add" onclick="showForm()">
+    <i class="fas fa-plus"></i> Add Vehicle
+  </button>
+  
   <table>
     <thead>
       <tr>
@@ -262,6 +265,34 @@ header h1 { margin-left:10px; font-size:20px; font-weight:600; display:flex; ali
 </div>
 
 <script>
+
+document.addEventListener('DOMContentLoaded', function() {
+  // ✅ UPDATE OVERVIEW CARDS
+  const rows = document.querySelectorAll('tbody tr');
+  let total = 0;
+  let active = 0;
+  let inactive = 0;
+
+  rows.forEach(row => {
+    const cells = row.querySelectorAll('td');
+    if (cells.length > 0) {
+      total++;
+      const status = cells[4].textContent.trim(); // Status column (5th column, index 4)
+      
+      if (status === 'Active') {
+        active++;
+      } else if (status === 'Inactive') {
+        inactive++;
+      }
+    }
+  });
+
+  // Update the cards
+  document.getElementById('totalVehicles').textContent = total;
+  document.getElementById('availableVehicles').textContent = active;
+  document.getElementById('onGoingVehicles').textContent = inactive;
+});
+
 const sidebar = document.getElementById('sidebar');
 const menuBtn = document.getElementById('menuBtn');
 const overlay = document.getElementById('overlay');

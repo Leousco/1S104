@@ -450,14 +450,15 @@ $schedules = $conn->query("
     }
 
     .ticket-qr {
-      max-width: 250px;
-      margin: 15px auto;
-      display: block;
-      border: 2px solid #2e7d32;
-      border-radius: 8px;
-      padding: 10px;
-      background: white;
-    }
+    max-width: 150px; /* previously 250px */
+    height: auto;
+    margin: 10px auto; /* slightly smaller spacing */
+    display: block;
+    border: 2px solid #2e7d32;
+    border-radius: 8px;
+    padding: 6px; /* previously 10px */
+}
+
 
     .notification {
       position: fixed;
@@ -557,12 +558,38 @@ $schedules = $conn->query("
       align-items: center;
       justify-content: center;
       text-align: center;
+      max-height: calc(100vh - 200px);
+      overflow-y: auto;
     }
+
+    .ticket-preview-box .btn.secondary {
+    padding: 8px 16px; /* smaller than 14px 24px */
+    font-size: 14px;   /* reduce text size */
+}
+
 
     .ticket-preview-box.empty {
       background: #f9f9f9;
       border: 2px dashed #ddd;
       color: #999;
+    }
+
+    .ticket-preview-box::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .ticket-preview-box::-webkit-scrollbar-track {
+      background: #f0fdf0;
+      border-radius: 10px;
+    }
+
+    .ticket-preview-box::-webkit-scrollbar-thumb {
+      background: #2e7d32;
+      border-radius: 10px;
+    }
+
+    .ticket-preview-box::-webkit-scrollbar-thumb:hover {
+      background: #1b5e20;
     }
 
     .ticket-detail {
@@ -579,11 +606,19 @@ $schedules = $conn->query("
     .right-column {
       position: sticky;
       top: 90px;
+      max-height: calc(100vh - 110px);
+      overflow: visible;
     }
 
     .right-column h3{
       text-align: center;
       margin-bottom: 10px;
+    }
+
+    .right-column .card {
+      display: flex;
+      flex-direction: column;
+      max-height: 100%;
     }
   </style>
 </head>
@@ -948,8 +983,8 @@ $schedules = $conn->query("
       
       showNotification('ticket-success', 'Ticket booked successfully!');
 
-      // Scroll to ticket preview
-      ticketPreview.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      // Scroll ticket preview to top to show all content
+      ticketPreview.scrollTop = 0;
       
     } catch (error) {
       console.error('Network or fetch error:', error);

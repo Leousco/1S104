@@ -399,7 +399,7 @@ $prefillEmail = isset($_COOKIE['remember_email']) ? $_COOKIE['remember_email'] :
           <input type="checkbox" name="remember_me" <?php echo !empty($prefillEmail) ? 'checked' : ''; ?>>
           Remember Me
         </label>
-        <a href="forgot_password.php" class="forgot">Forgot Password?</a>
+        <a href="forgotPassword/forgot_password.php" class="forgot">Forgot Password?</a>
       </div>
 
       <button type="submit" class="action-btn" id="login-btn">Log In</button>

@@ -223,8 +223,8 @@ th { background:#8de699; font-weight:bold; }
     <a href="admin_dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
     <a href="Analytics.php"><i class="fas fa-chart-line"></i> Analytics</a>
     <a href="admin_bugreport.php"><i class="fas fa-bug"></i> User Report</a>
-    <a href="coin_deal_management.php"><i class="fas fa-ticket-alt"></i> Coin Deals Management</a>
     <a href="user_management.php"><i class="fas fa-users-cog"></i> User Management</a>
+    <a href="coin_deal_management.php"><i class="fas fa-ticket-alt"></i> Coin Deals Management</a>
     <a href="vehicle_management.php"><i class="fas fa-car-side"></i> Vehicle Management</a>
     <a href="schedule_management.php" class="bg-green-600 rounded"><i class="fas fa-calendar-alt"></i> Schedule Management</a>
     <a href="route_management.php"><i class="fas fa-route"></i> Routes Management</a>
@@ -238,8 +238,8 @@ th { background:#8de699; font-weight:bold; }
   <h2 class="text-2xl font-bold mb-6 text-gray-800">Schedules Overview</h2>
     <section class="cards">
         <div class="card"><h3>Total Schedules</h3><p id="totalSchedules">0</p></div>
-        <div class="card"><h3>Upcoming</h3><p id="upcomingSchedules">0</p></div>
-        <div class="card"><h3>Completed</h3><p id="completedSchedules">0</p></div>
+        <div class="card"><h3>Active Schedules</h3><p id="upcomingSchedules">0</p></div>
+        <div class="card"><h3>Inactive Schedules</h3><p id="completedSchedules">0</p></div>
     </section>
   <!-- TABLE -->
   <button class="btn btn-add" onclick="showForm()">+ Add Schedule</button>
@@ -375,6 +375,32 @@ th { background:#8de699; font-weight:bold; }
 <script>
 
 document.addEventListener('DOMContentLoaded', function () {
+  // ✅ UPDATE OVERVIEW CARDS
+  const rows = document.querySelectorAll('tbody tr');
+  let total = 0;
+  let active = 0;
+  let inactive = 0;
+
+  rows.forEach(row => {
+    const cells = row.querySelectorAll('td');
+    if (cells.length > 0) {
+      total++;
+      const status = cells[8].textContent.trim(); // Status column (9th column, index 8)
+      
+      if (status === 'Active') {
+        active++;
+      } else if (status === 'Inactive') {
+        inactive++;
+      }
+    }
+  });
+
+  // Update the cards
+  document.getElementById('totalSchedules').textContent = total;
+  document.getElementById('upcomingSchedules').textContent = active;
+  document.getElementById('completedSchedules').textContent = inactive;
+
+  // ✅ VEHICLE TYPE FILTER
   const typeSelect = document.getElementById('vehicleType');
   const vehicleSelect = document.getElementById('vehicle');
   const routeSelect = document.getElementById('route');
@@ -448,7 +474,7 @@ function editSchedule(id, date, dep, arr, status) {
   showForm(true);
   hiddenId.value = id;
   // set date/day select (we use id="date" on the select)
-  const dateEl = document.getElementById('date');
+  const dateEl = document.getElementById('dayOfWeek');
   if (dateEl) dateEl.value = date || '';
   document.getElementById('departure').value = dep || '';
   document.getElementById('arrival').value = arr || '';
@@ -460,7 +486,7 @@ function editSchedule(id, date, dep, arr, status) {
   // you may want to fetch the schedule details via AJAX instead of relying on passed args.
 }
 
-// Submit handler — use FormData so PHP receives $_POST fields as usual
+// Submit handler – use FormData so PHP receives $_POST fields as usual
 formEl.addEventListener('submit', async (e) => {
   e.preventDefault();
 
@@ -476,7 +502,7 @@ formEl.addEventListener('submit', async (e) => {
   try {
     const res = await fetch(url, {
       method: 'POST',
-      body: fd // no content-type header — browser sets multipart/form-data automatically
+      body: fd // no content-type header – browser sets multipart/form-data automatically
     });
 
     // try parse JSON response
@@ -486,7 +512,7 @@ formEl.addEventListener('submit', async (e) => {
       result = JSON.parse(resultText);
     } catch (err) {
       console.error('Server returned non-JSON response:', resultText);
-      alert('Server error — check server logs/console. Response was not JSON.');
+      alert('Server error – check server logs/console. Response was not JSON.');
       return;
     }
 
@@ -520,7 +546,7 @@ async function deleteSchedule(id) {
     }
   } catch (err) {
     console.error('Delete error:', err);
-    alert('Delete failed — check console.');
+    alert('Delete failed – check console.');
   }
 }
 

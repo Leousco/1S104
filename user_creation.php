@@ -211,7 +211,7 @@ $conn->close();
   .action-btn:hover { background-color: #222; }
 
   #combined-password-feedback { margin-top: 20px; text-align: center; }
-  #password-match-text, #password-strength-text { font-size: 85%; font-weight: bold; }
+  #password-match-text, #password-strength-text { font-size: 0.8rem; font-weight: bold; }
 
   .match-status-nomatch { color: #CC0000 !important; }
   .match-status-match { color: #006400 !important; }
@@ -221,6 +221,18 @@ $conn->close();
   .status-strong { color: #006400 !important; }
   #strength-progress-container { height: 8px; width: 100%; background-color: #e0e0e0; border-radius: 4px; overflow: hidden; margin: 10px 0; }
   #strength-progress-bar { height: 100%; width: 0%; background-color: #2196F3; transition: width 0.3s ease, background-color 0.3s ease; border-radius: 4px; }
+
+  .bar-weak {
+      background-color: #CC0000 !important;  /* Red for weak */
+  }
+
+  .bar-moderate {
+      background-color: #FFA500 !important;  /* Yellow/Orange for moderate */
+  }
+
+  .bar-strong {
+      background-color: #006400 !important;  /* Green for strong */
+  }
 
   .popup-message {
     position: fixed;
@@ -288,6 +300,8 @@ $conn->close();
 
 
     <form method="POST" action="" onsubmit="return validateFormSubmission();">
+        <input type="text" name="fakeusernameremembered" style="display:none">
+        <input type="password" name="fakepasswordremembered" style="display:none">
       <label for="first-name">First Name</label>
       <input type="text" id="first-name" name="firstname" placeholder="John" minlength="2" required 
             value="<?php echo (isset($_SESSION['reg_firstname']) && isset($_POST['firstname'])) ? htmlspecialchars($_SESSION['reg_firstname']) : ''; ?>"
@@ -307,13 +321,14 @@ $conn->close();
       </div>
 
       <label for="email-signup">Email</label>
-      <input type="email" id="email-signup" name="email" placeholder="User_Name!1@gmail.com" required
+      <input type="email" id="email-signup" name="email" autocomplete="off" placeholder="User_Name!1@gmail.com" required
             value="<?php echo (isset($_SESSION['reg_email']) && isset($_POST['email'])) ? htmlspecialchars($_SESSION['reg_email']) : ''; ?>"
             oninput="validateStrictEmail(this)" />
 
       <label for="password-signup">Password</label>
       <div class="input-wrapper">
-        <input type="password" id="password-signup" name="password" placeholder="Enter a password" required minlength="6"
+
+        <input type="password" id="password-signup" name="new_password" autocomplete="new-password" placeholder="Enter a password" required minlength="6"
               value="<?php echo (isset($_SESSION['reg_password_plain']) && isset($_POST['password'])) ? htmlspecialchars($_SESSION['reg_password_plain']) : ''; ?>"
               oninput="handleCombinedFeedback()" />
         <img src="https://cdn-icons-png.flaticon.com/512/159/159604.png" alt="Show Password" class="toggle-password"
@@ -322,7 +337,7 @@ $conn->close();
 
       <label for="confirm-password">Confirm Password</label>
       <div class="input-wrapper">
-        <input type="password" id="confirm-password" name="confirm_password" placeholder="Confirm your password" required minlength="6"
+        <input type="password" id="confirm-password" name="confirm_password" autocomplete="new-password" placeholder="Confirm your password" required minlength="6"
               value="<?php echo (isset($_SESSION['reg_password_plain']) && isset($_POST['password'])) ? htmlspecialchars($_SESSION['reg_password_plain']) : ''; ?>"
               oninput="handleCombinedFeedback()" />
         <img src="https://cdn-icons-png.flaticon.com/512/159/159604.png" alt="Show Password" class="toggle-password"
@@ -353,6 +368,11 @@ $conn->close();
 </div>
 
 <script>
+
+document.getElementById('back-to-login').addEventListener('click', function() {
+    window.location.href = 'login.php';
+});
+
   function autoCapitalize(inputField) {
     let value = inputField.value;
     if (value.length > 0) {
@@ -376,7 +396,7 @@ $conn->close();
     const MIN_LENGTH = 6, MAX_LENGTH = 50;
     let score = 0, strengthClass = '', strengthText = '';
     if (password.length === 0) return { score:0, strengthClass:'', strengthText:'Enter a password' };
-    if (password.length < MIN_LENGTH) return { score:0, strengthClass:'weak', strengthText:'Too short' };
+    if (password.length < MIN_LENGTH) return { score:0, strengthClass:'weak', strengthText:'Too short <br>(Minimum of 6 characters)' };
     if (password.length > MAX_LENGTH) return { score:100, strengthClass:'strong', strengthText:'Strong (but too long!)' };
 
     const hasLowercase = /[a-z]/.test(password);
@@ -407,7 +427,7 @@ $conn->close();
 
     progressBar.style.width = strengthData.score + '%';
     progressBar.className = 'bar-' + strengthData.strengthClass;
-    strengthTextElement.textContent = 'Password ' + strengthData.strengthText;
+    strengthTextElement.innerHTML = 'Password ' + strengthData.strengthText;
     strengthTextElement.className = 'status-' + strengthData.strengthClass;
 
     const matchTextElement = document.getElementById('password-match-text');

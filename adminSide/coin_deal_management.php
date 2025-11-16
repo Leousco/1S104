@@ -435,24 +435,24 @@ $stats = $conn->query("
     <form id="dealForm">
       <input type="hidden" id="editId" name="id">
 
-      <label>Deal Name *</label>
+      <label>Deal Name</label>
       <input type="text" id="dealName" name="dealName" placeholder="e.g., Starter Pack, Mega Bundle" required>
-      <div class="help-text">Give your deal a catchy name</div>
+      
 
-      <label>Coin Amount *</label>
+      <label>Coin Amount</label>
       <input type="number" id="coinAmount" name="coinAmount" min="1" placeholder="e.g., 100" required>
-      <div class="help-text">Number of coins included in this deal</div>
+      
 
-      <label>Price (₱) *</label>
+      <label>Price (₱)</label>
       <input type="number" id="price" name="price" step="0.01" min="0.01" placeholder="e.g., 50.00" required>
-      <div class="help-text">Price in Philippine Pesos</div>
+      
 
-      <label>Deal Type *</label>
+      <label>Deal Type</label>
       <select id="dealType" name="dealType" required onchange="toggleDateFields()">
         <option value="STANDARD">Standard (No Expiry)</option>
         <option value="LIMITED">Limited (Time-Limited)</option>
       </select>
-      <div class="help-text">Standard deals are permanent, Limited deals expire after a set period</div>
+      
 
       <div id="dateFields" class="date-fields">
         <label>Valid From *</label>
@@ -462,12 +462,12 @@ $stats = $conn->query("
         <input type="datetime-local" id="validTo" name="validTo">
       </div>
 
-      <label>Status *</label>
+      <label>Status</label>
       <select id="status" name="status" required>
         <option value="ACTIVE">Active</option>
         <option value="INACTIVE">Inactive</option>
       </select>
-      <div class="help-text">Only active deals are visible to users</div>
+      
 
       <div class="modal-buttons">
         <button type="submit" class="btn-save">
@@ -519,7 +519,7 @@ function toggleDateFields() {
 
 function showForm(edit = false) {
   formOverlay.style.display = 'flex';
-  formTitle.innerHTML = edit ? '<i class="fas fa-edit"></i> Edit Coin Deal' : '<i class="fas fa-plus"></i> Add Coin Deal';
+  formTitle.innerHTML = edit ? '<i class="fas fa-edit"></i> Edit Coin Deal' : '<i></i> Add Coin Deal';
   formEl.reset();
   hiddenId.value = '';
   toggleDateFields();

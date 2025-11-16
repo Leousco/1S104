@@ -341,9 +341,9 @@ main { padding: 20px; animation: slideIn 0.6s ease; }
     <h2 class="text-green-400"><i class="fas fa-grip-vertical"></i> Menu</h2>
     <a href="admin_dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
     <a href="Analytics.php"><i class="fas fa-chart-line"></i> Analytics</a>
-    <a href="coin_deal_management.php"><i class="fas fa-ticket-alt"></i> Coin Deals Management</a>
     <a href="admin_bugreport.php"><i class="fas fa-bug"></i> User Report</a>
     <a href="user_management.php"><i class="fas fa-users-cog"></i> User Management</a>
+    <a href="coin_deal_management.php"><i class="fas fa-ticket-alt"></i> Coin Deals Management</a>
     <a href="vehicle_management.php"><i class="fas fa-car-side"></i> Vehicle Management</a>
     <a href="schedule_management.php"><i class="fas fa-calendar-alt"></i> Schedule Management</a>
     <a href="route_management.php" class="bg-green-600 rounded"><i class="fas fa-route"></i> Route Management</a>
@@ -440,6 +440,38 @@ main { padding: 20px; animation: slideIn 0.6s ease; }
 </div>
 
 <script>
+
+document.addEventListener('DOMContentLoaded', function() {
+  // ✅ UPDATE OVERVIEW CARDS
+  const rows = document.querySelectorAll('tbody tr');
+  let total = 0;
+  let light = 0;
+  let moderate = 0;
+  let heavy = 0;
+
+  rows.forEach(row => {
+    const cells = row.querySelectorAll('td');
+    if (cells.length > 0) {
+      total++;
+      const traffic = cells[5].textContent.trim().toUpperCase(); // Traffic Status column
+      
+      if (traffic === 'LIGHT') {
+        light++;
+      } else if (traffic === 'MODERATE') {
+        moderate++;
+      } else if (traffic === 'HEAVY') {
+        heavy++;
+      }
+    }
+  });
+
+  // Update the cards
+  document.getElementById('totalRoutes').textContent = total;
+  document.getElementById('lightTraffic').textContent = light;
+  document.getElementById('heavyTraffic').textContent = heavy;
+  document.getElementById('moderateTraffic').textContent = moderate;
+});
+
 const sidebar=document.getElementById('sidebar');
 const overlay=document.getElementById('overlay');
 document.getElementById('menuBtn').onclick=()=>{sidebar.classList.toggle('open');overlay.classList.toggle('show');};
