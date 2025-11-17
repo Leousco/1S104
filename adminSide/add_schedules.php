@@ -26,7 +26,7 @@ if (strlen($departure) === 5) $departure .= ":00"; // "HH:MM" → "HH:MM:00"
 if (strlen($arrival) === 5) $arrival .= ":00";
 
 $stmt = $conn->prepare("
-    INSERT INTO schedule (VehicleID, RouteID, Date, DepartureTime, ArrivalTime, Status)
+    INSERT INTO schedules (VehicleID, RouteID, DayOfWeek, DepartureTime, ArrivalTime, Status)
     VALUES (?, ?, ?, ?, ?, ?)
 ");
 

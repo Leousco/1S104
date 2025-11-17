@@ -593,6 +593,10 @@ $balance = isset($_SESSION['balance']) ? $_SESSION['balance'] : 0;
     <i class="fas fa-user"></i>
     <h3>Profile</h3>
   </a>
+  <a href="about.php" class="grid-card">
+    <i class="fas fa-info-circle"></i>
+    <h3>About Us</h3>
+  </a>
 </section>
 
 

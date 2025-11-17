@@ -168,19 +168,19 @@ $tickets_sql = "
         t.TicketID,
         r.StartLocation AS Origin,
         r.EndLocation AS Destination,
-        s.Date,
+        s.DayOfWeek,
         s.DepartureTime,
         s.ArrivalTime
     FROM 
         ticket t
     JOIN 
-        schedule s ON t.ScheduleID = s.ScheduleID
+        schedules s ON t.ScheduleID = s.ScheduleID
     JOIN 
         route r ON s.RouteID = r.RouteID
     WHERE 
         t.PassengerID = ?
     ORDER BY
-        s.Date ASC, s.DepartureTime ASC
+        s.DayOfWeek ASC, s.DepartureTime ASC
 ";
 
 $tickets_stmt = $conn->prepare($tickets_sql);
@@ -443,7 +443,7 @@ $conn->close();
           <a href="passenger_dashboard.php"><i class="fa fa-home"></i> Homepage</a>
           <a href="vehicle.php"><i class="fa fa-bus"></i> Vehicles</a>
           <a href="ticketing/ticketing.php"><i class="fa fa-ticket"></i> Buy Ticket</a>
-          <a href="buyCoin/buy_coins.php"><i class="fa fa-gift"></i> Buy Coins</a>
+          <a href="buyCoin/buy_coins.php"><i class="fa fa-coins"></i> Buy Coins</a>
           <a href="redeem_voucher.php"><i class="fa fa-gift"></i> Redeem Voucher</a>
           <a href="Feedback.php"><i class="fa fa-comment"></i> Feedback</a>
           <a href="about.php"><i class="fa fa-info-circle"></i> About Us</a>
@@ -502,7 +502,7 @@ $conn->close();
                 <div class="ticket">
                     <span>
                         <?php echo htmlspecialchars($ticket['Origin']) . ' &rarr; ' . htmlspecialchars($ticket['Destination']); ?><br>
-                        <small>Departure: **<?php echo htmlspecialchars($ticket['Date']); ?>** at <?php echo htmlspecialchars(date('g:i A', strtotime($ticket['DepartureTime']))); ?></small>
+                        <small>Departure: **<?php echo htmlspecialchars($ticket['DayOfWeek']); ?>** at <?php echo htmlspecialchars(date('g:i A', strtotime($ticket['DepartureTime']))); ?></small>
                     </span>
                     <span class="status active">Active</span>
                 </div>

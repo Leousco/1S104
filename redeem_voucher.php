@@ -2,8 +2,6 @@
 session_start();
 include("config.php"); 
 
-// The passenger dashboard logic implies a logged-in user.
-// Assuming the user is logged in as a PASSENGER
 if (!isset($_SESSION['UserID']) || $_SESSION['Role'] !== "PASSENGER") {
     // Redirect unauthenticated users
     header("Location: ../login.php");
@@ -329,6 +327,26 @@ if (!isset($_SESSION['UserID']) || $_SESSION['Role'] !== "PASSENGER") {
   .hidden {
     display: none;
   }
+
+  .balance-display {
+            background: linear-gradient(135deg, #2e7d32 0%, #66bb6a 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(46, 125, 50, 0.3);
+        }
+
+        .balance-display .amount {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .balance-display .label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
         
     </style>
 </head>
@@ -397,10 +415,11 @@ if (!isset($_SESSION['UserID']) || $_SESSION['Role'] !== "PASSENGER") {
 <div id="voucher-error" class="notification error" style="display:none;"></div>
 
 <div class="container">
-    <div class="card">
-        <h3>Wallet Balance</h3>
-        <div id="user-balance" style="font-size:22px;font-weight:700">₱0</div>
-        </div>
+
+    <div class="balance-display">
+                <div class="label">Wallet Balance</div>
+                <div class="amount" id="user-balance">₱0.00</div>
+            </div>
 
     <div class="card">
         <h3>Redeem Voucher</h3>

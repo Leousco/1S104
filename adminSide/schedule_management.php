@@ -37,13 +37,13 @@ $result = $conn->query("
     s.RouteID,
     s.DepartureTime,
     s.ArrivalTime,
-    s.Date,
+    s.DayOfWeek,
     s.Status,
     r.StartLocation,
     r.EndLocation,
     v.PlateNo,
     vt.TypeName
-  FROM schedule s
+  FROM schedules s
   JOIN route r ON s.RouteID = r.RouteID
   JOIN vehicle v ON s.VehicleID = v.VehicleID
   JOIN vehicletype vt ON v.TypeID = vt.TypeID
@@ -266,13 +266,13 @@ th { background:#8de699; font-weight:bold; }
         <td><?= htmlspecialchars($row['PlateNo']) ?></td>
         <td><?= htmlspecialchars($row['StartLocation']) ?></td>
         <td><?= htmlspecialchars($row['EndLocation']) ?></td>
-        <td><?= htmlspecialchars($row['Date']) ?></td>
+        <td><?= htmlspecialchars($row['DayOfWeek']) ?></td>
         <td><?= htmlspecialchars($row['DepartureTime']) ?></td>
         <td><?= htmlspecialchars($row['ArrivalTime']) ?></td>
         <td><?= htmlspecialchars($row['Status']) ?></td>
         <td>
           <button class="btn btn-edit"
-            onclick="editSchedule(<?= $row['ScheduleID'] ?>, '<?= $row['Date'] ?>', '<?= $row['DepartureTime'] ?>', '<?= $row['ArrivalTime'] ?>', '<?= $row['Status'] ?>')">
+            onclick="editSchedule(<?= $row['ScheduleID'] ?>, '<?= $row['DayOfWeek'] ?>', '<?= $row['DepartureTime'] ?>', '<?= $row['ArrivalTime'] ?>', '<?= $row['Status'] ?>')">
             Edit
           </button>
           <button class="btn btn-delete" onclick="deleteSchedule(<?= $row['ScheduleID'] ?>)">Remove</button>
@@ -333,13 +333,13 @@ th { background:#8de699; font-weight:bold; }
         <label for="dayOfWeek">Day</label>
         <select id="dayOfWeek" name="date" required>
           <option value="">Select Day</option>
-          <option value="Monday">Monday</option>
-          <option value="Tuesday">Tuesday</option>
-          <option value="Wednesday">Wednesday</option>
-          <option value="Thursday">Thursday</option>
-          <option value="Friday">Friday</option>
-          <option value="Saturday">Saturday</option>
-          <option value="Sunday">Sunday</option>
+          <option value="Mon">Monday</option>
+          <option value="Tue">Tuesday</option>
+          <option value="Wed">Wednesday</option>
+          <option value="Thu">Thursday</option>
+          <option value="Fri">Friday</option>
+          <option value="Sat">Saturday</option>
+          <option value="Sun">Sunday</option>
         </select>
       </div>
 

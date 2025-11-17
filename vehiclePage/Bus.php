@@ -127,6 +127,19 @@ require_once '../config.php';
       display: none;                
     }
 
+/* CHECKBOX */
+
+input[type="checkbox"].routeCheckbox {
+  width: 18px;
+  height: 18px;
+  accent-color: #2e7d32; 
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+input[type="checkbox"].routeCheckbox:hover {
+  transform: scale(1.2);
+}
+
   </style>
 </head>
 <body>
@@ -201,14 +214,26 @@ require_once '../config.php';
       <!-- Schedule column -->
       <div class="col-span-5">
         <div class="card p-4">
+
+
           <div class="flex items-center justify-between mb-3">
             <h2 class="font-semibold">Schedules</h2>
-            <div>
-              <label class="text-sm text-gray-600 mr-2">Date</label>
-              <input id="datePicker" type="date" class="p-1 border rounded">
-              <button id="refreshSchedules" class="ml-2 text-sm text-blue-600 hover:underline">Refresh</button>
+            <div class="flex items-center space-x-2">
+              <label class="text-sm text-gray-600">Day</label>
+              <select id="daySelect" class="p-1 border rounded">
+                <option value="">All Days</option>
+                <option value="Mon">Monday</option>
+                <option value="Tue">Tuesday</option>
+                <option value="Wed">Wednesday</option>
+                <option value="Thu">Thursday</option>
+                <option value="Fri">Friday</option>
+                <option value="Sat">Saturday</option>
+                <option value="Sun">Sunday</option>
+              </select>
+              <button id="refreshSchedules" class="text-sm text-blue-600 hover:underline">Refresh</button>
             </div>
           </div>
+
 
           <div id="schedulesList" class="space-y-2 max-h-[70vh] overflow-auto"></div>
         </div>
@@ -251,7 +276,7 @@ function closeNav() {
 const routesListEl = document.getElementById('routesList');
 const schedulesListEl = document.getElementById('schedulesList');
 const routeSearch = document.getElementById('routeSearch');
-const datePicker = document.getElementById('datePicker');
+const datePicker = document.getElementById('dateSelect');
 const trafficText = document.getElementById('trafficText');
 const trafficPill = document.getElementById('trafficPill');
 
@@ -291,28 +316,42 @@ function renderRoutes(list) {
   }
   list.forEach(r => {
     const div = document.createElement('div');
-    div.className = 'p-2 border rounded hover:bg-gray-50 flex justify-between items-start';
+    div.className = 'p-2 border rounded hover:bg-gray-50 flex justify-between items-center';
     div.innerHTML = `
       <div>
         <div class="font-medium">#${r.RouteID} — ${escapeHtml(r.StartLocation)} → ${escapeHtml(r.EndLocation)}</div>
         <div class="text-xs text-gray-500">Lat ${r.Latitude || '-'} · Lon ${r.Longitude || '-'}</div>
       </div>
       <div class="text-right">
-        <button data-id="${r.RouteID}" class="selectRouteBtn text-sm text-blue-600 hover:underline">Select</button>
+        <input type="checkbox" class="routeCheckbox" data-id="${r.RouteID}" />
       </div>
     `;
     routesListEl.appendChild(div);
 
-    // attach traffic load on hover/click optional
-    div.querySelector('.selectRouteBtn').addEventListener('click', () => {
-      selectedRouteId = r.RouteID;
-      // highlight selection (simple)
-      Array.from(routesListEl.querySelectorAll('.p-2')).forEach(n => n.classList.remove('bg-blue-50'));
-      div.classList.add('bg-blue-50');
-      // load schedules for route
-      loadSchedules(r.RouteID);
-      // set traffic pill
-      setTrafficUI(r.traffic_status || null);
+    // handle checkbox logic
+    const checkbox = div.querySelector('.routeCheckbox');
+    checkbox.addEventListener('change', () => {
+      // uncheck all others
+      document.querySelectorAll('.routeCheckbox').forEach(cb => {
+        if (cb !== checkbox) cb.checked = false;
+      });
+
+      if (checkbox.checked) {
+        selectedRouteId = r.RouteID;
+        div.classList.add('bg-blue-50');
+        loadSchedules(r.RouteID);
+        setTrafficUI(r.traffic_status || null);
+      } else {
+        selectedRouteId = null;
+        div.classList.remove('bg-blue-50');
+        loadSchedules(); // show all schedules
+        setTrafficUI(null);
+      }
+
+      // update highlighting
+      Array.from(routesListEl.querySelectorAll('.p-2')).forEach(n => {
+        if (n !== div) n.classList.remove('bg-blue-50');
+      });
     });
   });
 }
@@ -385,14 +424,16 @@ async function loadRoutes(q = '') {
 // fetch schedules (optionally by route)
 async function loadSchedules(routeId = null) {
   const url = new URL('get_schedules.php', window.location.href);
+  url.searchParams.set('typeID', 1)
   if (routeId) url.searchParams.set('route_id', routeId);
-  if (datePicker.value) url.searchParams.set('date', datePicker.value);
+  if (daySelect.value) url.searchParams.set('day', daySelect.value); // use selected day
   const res = await fetch(url);
   const data = await res.json();
   if (!data.success) return;
   schedules = data.schedules || [];
   renderSchedules(schedules);
 }
+
 
 // events
 routeSearch.addEventListener('input', () => {
@@ -422,7 +463,7 @@ routeSearch.addEventListener('input', () => {
 
 document.getElementById('refreshRoutes').addEventListener('click', () => loadRoutes(routeSearch.value.trim()));
 document.getElementById('refreshSchedules').addEventListener('click', () => loadSchedules(selectedRouteId));
-datePicker.addEventListener('change', () => loadSchedules(selectedRouteId));
+daySelect.addEventListener('change', () => loadSchedules(selectedRouteId));
 
 // initial load:
 (async function init() {

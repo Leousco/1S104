@@ -90,7 +90,7 @@ try {
     $mail->Port = 587;
 
     // Recipients
-    $mail->setFrom('novacore.mailer@gmail.com', 'NovaCore Team');
+    $mail->setFrom('novacore.mailer@gmail.com', 'NovaCore');
     $mail->addAddress($user_email);
 
     // Email Body

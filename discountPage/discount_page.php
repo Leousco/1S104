@@ -309,7 +309,7 @@ function isDisabled($category) {
         <?php if ($activeCategory === 'PWD' && $activeStatus === 'Approved'): ?>
           <span class="text-green-600 font-semibold">(Approved)</span>
         <?php elseif ($activeCategory === 'PWD' && $activeStatus === 'Pending'): ?>
-          <span class="text-blue-600 font-semibold">(Pending)</span>
+          <span class="text-yellow-600 font-semibold">(Pending)</span>
         <?php endif; ?>
       </button>
 
@@ -324,7 +324,7 @@ function isDisabled($category) {
         <?php if ($activeCategory === 'Senior' && $activeStatus === 'Approved'): ?>
           <span class="text-green-600 font-semibold">(Approved)</span>
         <?php elseif ($activeCategory === 'Senior' && $activeStatus === 'Pending'): ?>
-          <span class="text-blue-600 font-semibold">(Pending)</span>
+          <span class="text-yellow-600 font-semibold">(Pending)</span>
         <?php endif; ?>
       </button>
 
@@ -339,7 +339,7 @@ function isDisabled($category) {
         <?php if ($activeCategory === 'Government' && $activeStatus === 'Approved'): ?>
           <span class="text-green-600 font-semibold">(Approved)</span>
         <?php elseif ($activeCategory === 'Government' && $activeStatus === 'Pending'): ?>
-          <span class="text-blue-600 font-semibold">(Pending)</span>
+          <span class="text-yellow-600 font-semibold">(Pending)</span>
         <?php endif; ?>
       </button>
 

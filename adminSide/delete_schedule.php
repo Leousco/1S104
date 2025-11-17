@@ -17,7 +17,7 @@ if (!$id) {
     exit();
 }
 
-$stmt = $conn->prepare("DELETE FROM schedule WHERE ScheduleID=?");
+$stmt = $conn->prepare("DELETE FROM schedules WHERE ScheduleID=?");
 $stmt->bind_param("i", $id);
 $ok = $stmt->execute();
 

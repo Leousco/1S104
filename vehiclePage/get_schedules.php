@@ -14,13 +14,13 @@ $sql = "SELECT
             s.RouteID, 
             s.DepartureTime, 
             s.ArrivalTime, 
-            s.Date, 
+            s.DayOfWeek, 
             s.Status,
             v.PlateNo, 
             vt.TypeName, 
             r.StartLocation, 
             r.EndLocation
-        FROM schedule s
+        FROM schedules s
         JOIN vehicle v ON s.VehicleID = v.VehicleID
         JOIN vehicletype vt ON v.TypeID = vt.TypeID
         JOIN route r ON s.RouteID = r.RouteID
@@ -36,12 +36,14 @@ if ($routeId > 0) {
     $sql .= " AND s.RouteID = $routeId";
 }
 
-// ✅ Filter by date if provided
-if (!empty($date)) {
-    $sql .= " AND s.Date = '" . $conn->real_escape_string($date) . "'";
+$day = isset($_GET['day']) ? $_GET['day'] : null;
+
+if (!empty($day)) {
+    $sql .= " AND s.DayOfWeek = '" . $conn->real_escape_string($day) . "'";
 }
 
-$sql .= " ORDER BY s.Date ASC, s.DepartureTime ASC";
+
+$sql .= " ORDER BY FIELD(s.DayOfWeek,'Mon','Tue','Wed','Thu','Fri','Sat','Sun'), s.DepartureTime ASC";
 
 $result = $conn->query($sql);
 
