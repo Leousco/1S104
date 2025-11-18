@@ -8,10 +8,6 @@ use PHPMailer\PHPMailer\Exception;
 
 // Load PHPMailer (adjust path if needed)
 require '../vendor/autoload.php'; // If installed via Composer
-// OR if you downloaded PHPMailer manually:
-// require '../PHPMailer/src/Exception.php';
-// require '../PHPMailer/src/PHPMailer.php';
-// require '../PHPMailer/src/SMTP.php';
 
 session_start();
 
@@ -64,6 +60,23 @@ if (empty($user['Email']) || !filter_var($user['Email'], FILTER_VALIDATE_EMAIL))
     echo json_encode(['success' => false, 'error' => 'Invalid email address in your account']);
     exit;
 }
+
+
+// // Save ticket info in session
+// $_SESSION['last_ticket'] = [
+//     'ticket_id' => $ticket_id,
+//     'name' => "{$user['FirstName']} {$user['LastName']}",
+//     'email' => $user['Email'],
+//     'destination' => $destination,
+//     'vehicle_type' => $vehicleType,
+//     'date' => $schedule['DayOfWeek'],
+//     'departure_time' => $schedule['DepartureTime'],
+//     'arrival_time' => $schedule['ArrivalTime'],
+//     'fare' => $fare,
+//     'qr' => $qrFile,
+// ];
+
+
 
 // Check balance
 if ($user['balance'] < $fare) {

@@ -14,11 +14,10 @@ if (!isset($_SESSION['Role']) || $_SESSION['Role'] !== "PASSENGER") {
     exit();
 }
 
-
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
-    $passengerID = 1; 
+    // FIX: Use the logged-in UserID instead of hardcoded '1'
+    $passengerID = $_SESSION['UserID']; 
     $message = mysqli_real_escape_string($conn, $_POST['message']);
 
     $insertQuery = "INSERT INTO feedback (PassengerID, Message) VALUES ('$passengerID', '$message')";
@@ -27,12 +26,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: Feedback.php");
         exit;
     } else {
-        echo "<script>alert('Error submitting feedback.');</script>";
+        // If this fails, check your Foreign Key constraints in the database
+        echo "<script>alert('Error submitting feedback. Database error: " . $conn->error . "');</script>";
     }
 }
 
-// Fetch feedback from DB
-$query = "SELECT FeedbackID, PassengerID, Message FROM feedback ORDER BY FeedbackID DESC";
+// FIX: Join with users table to get Name and Profile Picture
+// We use LEFT JOIN so legacy feedback (without matching users) still shows up
+$query = "SELECT f.FeedbackID, f.Message, u.FirstName, u.LastName, u.ProfilePictureURL, f.PassengerID 
+          FROM feedback f 
+          LEFT JOIN users u ON f.PassengerID = u.UserID 
+          ORDER BY f.FeedbackID DESC";
 $result = $conn->query($query);
 ?>
 
@@ -296,6 +300,14 @@ $result = $conn->query($query);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         border: 2px solid #ffffff;
         flex-shrink: 0;
+        overflow: hidden; /* Ensures image stays within circle */
+    }
+
+    /* Added style for profile image inside avatar */
+    .avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
 
     .review-content {
@@ -496,11 +508,23 @@ $result = $conn->query($query);
 
     <!-- Reviews Section -->
     <div class="reviews" id="reviews">
-      <?php while ($row = $result->fetch_assoc()): ?>
+      <?php while ($row = $result->fetch_assoc()): 
+          // Determine display name
+          $displayName = !empty($row['FirstName']) ? htmlspecialchars($row['FirstName'] . ' ' . $row['LastName']) : "Passenger " . htmlspecialchars($row['PassengerID']);
+          
+          // Determine profile image or fallback initial
+          $hasProfilePic = !empty($row['ProfilePictureURL']);
+      ?>
         <div class="review">
-          <div class="avatar"><?php echo strtoupper(substr($row['PassengerID'], 0, 1)); ?></div>
+          <div class="avatar">
+              <?php if ($hasProfilePic): ?>
+                  <img src="<?php echo htmlspecialchars($row['ProfilePictureURL']); ?>" alt="Profile">
+              <?php else: ?>
+                  <?php echo strtoupper(substr($displayName, 0, 1)); ?>
+              <?php endif; ?>
+          </div>
           <div class="review-content">
-            <div class="review-name">Passenger <?php echo htmlspecialchars($row['PassengerID']); ?></div>
+            <div class="review-name"><?php echo $displayName; ?></div>
             <div class="review-message"><?php echo htmlspecialchars($row['Message']); ?></div>
           </div>
         </div>

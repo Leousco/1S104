@@ -6,6 +6,8 @@ if (!isset($_SESSION['Role']) || $_SESSION['Role'] !== "PASSENGER") {
 }
 
 $balance = isset($_SESSION['balance']) ? $_SESSION['balance'] : 0; 
+$username = $_SESSION['Name'] ?? "Guest";
+
 ?>
 
 <!DOCTYPE html>
@@ -339,11 +341,15 @@ $balance = isset($_SESSION['balance']) ? $_SESSION['balance'] : 0;
     display: none;
   }
 
-  .hero-section {
-  background: linear-gradient(to right, #2e7d32, #66bb6a);
+.hero-section {
+  background: linear-gradient(135deg, #2E7D32, #4CAF50); /* premium green gradient */
   color: white;
-  padding: 80px 40px;
+  padding: 100px 40px; /* more breathing room */
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px; /* spacing between elements */
 }
 
 .hero-content h2 {
@@ -357,17 +363,36 @@ $balance = isset($_SESSION['balance']) ? $_SESSION['balance'] : 0;
 }
 
 .hero-btn {
-  background: white;
-  color: #2e7d32;
-  padding: 12px 30px;
-  font-weight: bold;
+  background: #fff;
+  color: #2E7D32;
+  border: none;
+  padding: 12px 28px;
   border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
   text-decoration: none;
-  transition: background 0.3s ease;
+  display: inline-block;
+
+  /* Pumping animation */
+  animation: pump 2.5s infinite ease-in-out;
 }
 
+/* Hover overrides idle pump */
 .hero-btn:hover {
-  background: #f1f8e9;
+  background: #f1f1f1;
+  color: #1b5e20;
+  transform: scale(1.05);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+  animation: none; /* stop pumping while hovered */
+}
+
+/* Keyframes for pumping (breathing effect) */
+@keyframes pump {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.08); } /* gentle enlargement */
 }
 
 .features-grid {
@@ -446,32 +471,123 @@ $balance = isset($_SESSION['balance']) ? $_SESSION['balance'] : 0;
 }
 
 .grid-card {
-  background: white;
+  background: linear-gradient(180deg, #ffffff, #F8FFF9); /* Option B pale gradient */
   text-decoration: none;
   color: #333;
   padding: 30px 20px;
   border-radius: 12px;
   text-align: center;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: 
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border 0.25s ease,
+    background 0.25s ease;
+  position: relative;
 }
 
 .grid-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-  background: #f1f8e9;
+  transform: translateY(-6px) scale(1.03); /* slight raise + scale 3% */
+  box-shadow: 0 8px 20px rgba(46, 125, 50, 0.25); /* soft glow */
+  border: 2px solid rgba(46, 125, 50, 0.3);       /* glow border accent */
+  background: linear-gradient(180deg, #ffffff, #F1FFF3); /* subtle tint shift */
 }
 
 .grid-card i {
   font-size: 36px;
   color: #2e7d32;
   margin-bottom: 15px;
+  transition: color 0.3s ease, transform 0.3s ease;
 }
 
 .grid-card h3 {
   font-size: 16px;
   font-weight: 600;
 }
+
+.dashboard-section {
+  margin: 60px auto;
+  max-width: 1000px;
+  padding: 0 20px;
+}
+
+.dashboard-section h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #2e7d32;
+  margin-bottom: 20px;
+  text-align: left;
+  border-left: 6px solid #66bb6a;
+  padding-left: 12px;
+}
+
+.left-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Welcome text with transit theme */
+.welcome-text {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #ffffff;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  transform: translateX(-20px);
+  animation: slideInTransit 1s ease forwards 0.3s;
+}
+
+
+/* Entry animation: slide in like a train arriving */
+@keyframes slideInTransit {
+  from { opacity: 0; transform: translateX(-40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Icon bounce animation (like wheels turning) */
+@keyframes bounceWheel {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-4px); }
+}
+
+/* Glow underline accent like a transit line */
+.welcome-text::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, #2e7d32, #66bb6a, #2196f3);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s ease;
+}
+
+.welcome-text:hover::after {
+  transform: scaleX(1);
+}
+
+
+.dashboard-section h2 {
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: all 0.6s ease;
+}
+
+/* When visible */
+.dashboard-section h2.slide-in {
+  opacity: 1;
+  transform: translateX(0);
+}
+
 
 
   </style>
@@ -495,7 +611,7 @@ $balance = isset($_SESSION['balance']) ? $_SESSION['balance'] : 0;
       </a>
       
       <a href="buyCoin/buy_coins.php">
-        <i class="fas fa-gift"></i> Buy Coins
+        <i class="fas fa-coins"></i> Buy Coins
       </a>
       
       <a href="feedback.php">
@@ -524,7 +640,12 @@ $balance = isset($_SESSION['balance']) ? $_SESSION['balance'] : 0;
 
 
   <header>
-     <div class="menu" onclick="openNav()">☰</div>
+    <div class="left-header">
+      <div class="menu" onclick="openNav()">☰</div>
+        <span class="welcome-text">
+          <span>WELCOME!,</span> <span><?php echo htmlspecialchars($username); ?></span>
+        </span>
+      </div>
     <div class="right-header">
         <a href="buyCoin/buy_coins.php" class="coin-balance">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -549,8 +670,8 @@ $balance = isset($_SESSION['balance']) ? $_SESSION['balance'] : 0;
 <section class="features-grid">
   <div class="feature-card">
     <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="Routes" />
-    <h3>Real-Time Routes</h3>
-    <p>Track buses and E-jeep live with precision.</p>
+    <h3>Route Information</h3>
+    <p>View detailed bus and e-jeep routes at a glance.</p>
   </div>
   <div class="feature-card">
     <img src="https://cdn-icons-png.flaticon.com/512/1041/1041916.png" alt="Passes" />
@@ -564,40 +685,56 @@ $balance = isset($_SESSION['balance']) ? $_SESSION['balance'] : 0;
   </div>
 </section>
 
-<section class="dashboard-grid">
-  <a href="vehicle.php" class="grid-card">
-    <i class="fas fa-bus"></i>
-    <h3>Vehicles</h3>
-  </a>
-  <a href="ticketing/ticketing.php" class="grid-card">
-    <i class="fas fa-ticket-alt"></i>
-    <h3>Buy Ticket</h3>
-  </a>
-  <a href="buyCoin/buy_coins.php" class="grid-card">
-    <i class="fas fa-coins"></i>
-    <h3>Buy Coins</h3>
-  </a>
-  <a href="redeem_voucher.php" class="grid-card">
-    <i class="fas fa-gift"></i>
-    <h3>Redeem Voucher</h3>
-  </a>
-  <a href="feedback.php" class="grid-card">
-    <i class="fas fa-comment-dots"></i>
-    <h3>Feedback</h3>
-  </a>
-  <a href="discountPage/discount_page.php" class="grid-card">
-    <i class="fas fa-percent"></i>
-    <h3>Apply Discount</h3>
-  </a>
-  <a href="user_prof.php" class="grid-card">
-    <i class="fas fa-user"></i>
-    <h3>Profile</h3>
-  </a>
-  <a href="about.php" class="grid-card">
-    <i class="fas fa-info-circle"></i>
-    <h3>About Us</h3>
-  </a>
+<section class="dashboard-section">
+  <h2>🚌 Transportation</h2>
+  <div class="dashboard-grid">
+    <a href="vehicle.php" class="grid-card">
+      <i class="fas fa-bus"></i>
+      <h3>Vehicles</h3>
+    </a>
+    <a href="ticketing/ticketing.php" class="grid-card">
+      <i class="fas fa-ticket-alt"></i>
+      <h3>Buy Ticket</h3>
+    </a>
+  </div>
 </section>
+
+<section class="dashboard-section">
+  <h2>💳 Payments</h2>
+  <div class="dashboard-grid">
+    <a href="buyCoin/buy_coins.php" class="grid-card">
+      <i class="fas fa-coins"></i>
+      <h3>Buy Coins</h3>
+    </a>
+    <a href="redeem_voucher.php" class="grid-card">
+      <i class="fas fa-gift"></i>
+      <h3>Redeem Voucher</h3>
+    </a>
+  </div>
+</section>
+
+<section class="dashboard-section">
+  <h2>👤 User Tools</h2>
+  <div class="dashboard-grid">
+    <a href="user_prof.php" class="grid-card">
+      <i class="fas fa-user"></i>
+      <h3>Profile</h3>
+    </a>
+    <a href="discountPage/discount_page.php" class="grid-card">
+      <i class="fas fa-percent"></i>
+      <h3>Apply Discount</h3>
+    </a>
+    <a href="feedback.php" class="grid-card">
+      <i class="fas fa-comment-dots"></i>
+      <h3>Feedback</h3>
+    </a>
+    <a href="about.php" class="grid-card">
+      <i class="fas fa-info-circle"></i>
+      <h3>About Us</h3>
+    </a>
+  </div>
+</section>
+  
 
 
 
@@ -734,9 +871,22 @@ renderUserBalance();
     menu.classList.toggle('hidden');
   });
 
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const headings = document.querySelectorAll(".dashboard-section h2");
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("slide-in");
+        } else {
+          entry.target.classList.remove("slide-in"); // remove when out of view
+        }
+      });
+    }, { threshold: 0.3 }); // adjust sensitivity if needed
+
+    headings.forEach(h2 => observer.observe(h2));
+  });
 </script>
 </body>
 </html>
-
-
- 

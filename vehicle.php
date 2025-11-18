@@ -292,6 +292,59 @@
   line-height: 1.4;
 }
 
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.page-title {
+ font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #ffffff;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  transform: translateX(-20px);
+  animation: slideInTransit 1s ease forwards 0.3s;
+}
+
+/* Entry animation: slide in like a train arriving */
+@keyframes slideInTransit {
+  from { opacity: 0; transform: translateX(-40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Icon bounce animation (like wheels turning) */
+@keyframes bounceWheel {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-4px); }
+}
+
+/* Glow underline accent like a transit line */
+.page-title::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, #2e7d32, #66bb6a, #2196f3);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s ease;
+}
+
+.page-title:hover::after {
+  transform: scaleX(1);
+}
+
+
 
 
   </style>
@@ -316,8 +369,8 @@
         <i class="fas fa-ticket-alt"></i> Buy Ticket
       </a>
       
-      <a href="redeem_voucher.php">
-        <i class="fas fa-gift"></i> Redeem Voucher
+      <a href="buyCoin/buy_coins.php">
+        <i class="fas fa-coins"></i> Buy Coins
       </a>
       
       <a href="feedback.php">
@@ -348,7 +401,10 @@
 
 <!-- HEADER -->
 <header>
-   <div class="menu" onclick="openNav()">☰</div>
+   <div class="header-left">
+    <div class="menu" onclick="openNav()">☰</div>
+    <span class="page-title">Vehicle Selection</span> <!-- or App Name -->
+  </div>
     <div class="right-header">
         <a href="redeem_voucher.php" class="coin-balance">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -385,10 +441,6 @@
     <p>Eco-friendly rides for modern commuters.</p>
   </a>
 </section>
-
-
-
-
 
 <script>
 

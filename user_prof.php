@@ -502,7 +502,7 @@ $conn->close();
                 <div class="ticket">
                     <span>
                         <?php echo htmlspecialchars($ticket['Origin']) . ' &rarr; ' . htmlspecialchars($ticket['Destination']); ?><br>
-                        <small>Departure: **<?php echo htmlspecialchars($ticket['DayOfWeek']); ?>** at <?php echo htmlspecialchars(date('g:i A', strtotime($ticket['DepartureTime']))); ?></small>
+                        <small>Departure: <strong><?php echo htmlspecialchars($ticket['DayOfWeek']); ?></strong> at <?php echo htmlspecialchars(date('g:i A', strtotime($ticket['DepartureTime']))); ?></small>
                     </span>
                     <span class="status active">Active</span>
                 </div>

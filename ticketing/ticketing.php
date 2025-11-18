@@ -2,6 +2,7 @@
 require_once '../config.php';
 include("../auth.php");
 
+
 $loginPage = "/SADPROJ/login.php";
 
 // Access control
@@ -744,6 +745,87 @@ while ($r = $routeQuery->fetch_assoc()) {
             color: #2e7d32;
             font-weight: bold;
         }
+
+        .header-left {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        }
+
+        .page-title {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 1.3rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: #ffffff;
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        opacity: 0;
+        transform: translateX(-20px);
+        animation: slideInTransit 1s ease forwards 0.3s;
+        }
+
+        /* Entry animation: slide in like a train arriving */
+        @keyframes slideInTransit {
+        from { opacity: 0; transform: translateX(-40px); }
+        to   { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Icon bounce animation (like wheels turning) */
+        @keyframes bounceWheel {
+        0%, 100% { transform: translateY(0); }
+        50%      { transform: translateY(-4px); }
+        }
+
+        /* Glow underline accent like a transit line */
+        .page-title::after {
+        content: "";
+        position: absolute;
+        bottom: -6px;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(90deg, #2e7d32, #66bb6a, #2196f3);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.5s ease;
+        }
+
+        .page-title:hover::after {
+        transform: scaleX(1);
+        }
+
+/* POPUP */
+#popup-system {
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%); /* PERFECT center */
+    min-width: 250px;
+    background: #fcba03;
+    color: black;
+    padding: 15px 20px;
+    border-radius: 10px;
+    font-size: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+#popup-system .popup-text {
+    font-weight: normal;  
+}
+
+#popup-system .popup-icon {
+    font-size: 18px; 
+}
+
+
     </style>
 </head>
 
@@ -765,7 +847,10 @@ while ($r = $routeQuery->fetch_assoc()) {
 
     <!-- Header -->
     <header>
-        <div class="menu" onclick="openNav()">☰</div>
+        <div class="header-left">
+            <div class="menu" onclick="openNav()">☰</div>
+                <span class="page-title">Buy Tickets</span> <!-- or App Name -->
+        </div>
         <div class="right-header">
             <a href="../redeem_voucher.php" class="coin-balance">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
@@ -929,6 +1014,12 @@ while ($r = $routeQuery->fetch_assoc()) {
             </div>
         </div>
     </div>
+
+<div id="popup-system">
+    <span class="fa-solid fa-circle-check popup-icon"></span>
+    <span class="popup-text"></span>
+</div>
+
 
     <script>
 
@@ -1197,7 +1288,7 @@ async function generateTicket() {
         if (data.email_sent) {
             emailStatusMsg = `
                 <div style="background-color: #d4edda; color: #155724; padding: 12px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #c3e6cb;">
-                    <i class="fas fa-check-circle"></i> Check your inbox at <strong>${pendingBookingData.email}</strong>
+                    <i class="fas fa-check-circle"></i> Check your inbox at <strong style="font-weight: bold;">${pendingBookingData.email}</strong>
                 </div>
             `;
         } else if (data.email_error) {
@@ -1271,7 +1362,10 @@ async function generateTicket() {
         if (data.email_sent) {
             successMsg += '\n\nA confirmation email has been sent to ' + emailForMsg;
         }
-        alert(successMsg);
+        showPopup(successMsg, () => {
+            // Continue here after popup disappears
+            console.log("Proceeding...");
+        })
 
     } catch (error) {
         console.error(error);
@@ -1279,6 +1373,29 @@ async function generateTicket() {
         generateBtn.innerHTML = origText;
         generateBtn.disabled = false;
     }
+}
+
+// POP UP
+
+function showPopup(message, callback) {
+    const popup = document.getElementById('popup-system');
+    const textEl = document.querySelector('#popup-system .popup-text');
+
+    textEl.textContent = message;
+
+    // show
+    popup.style.opacity = "1";
+    popup.style.transform = "translateX(-50%)";
+
+    // hide
+    setTimeout(() => {
+        popup.style.opacity = "0";
+        popup.style.transform = "translateX(-50%)";
+
+        setTimeout(() => {
+            if (callback) callback();
+        }, 300);
+    }, 5000); 
 }
 
 
